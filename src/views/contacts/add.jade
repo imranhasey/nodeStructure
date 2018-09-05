@@ -1,0 +1,67 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css' integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous")
+    script(src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous")
+  body
+    div.container
+      div.row
+        div.col-lg-12
+          div.col-lg-2
+          div.col-lg-8
+            div.panel.panel-default
+              div.panel-heading
+                p Contacts Manager
+              div.panel-body
+              - if (typeof data !== 'undefined')
+                    label ID 
+                    input#id.form-control(type='text' name='id' value="#{data.id}")
+                    label Name
+                    input#name.form-control(type='text' name='name' value="#{data.name}")
+                    label Phone
+                    input#phone.form-control(type='number' name='phone' value="#{data.phone}")
+                    label Address
+                    input#address.form-control(type='text' name='address' value="#{data.address}")
+                    label Github Username
+                    input#github.form-control(type='text' name='github' value="#{data.github}")
+                    button#btn-update.btn.btn-primary(type="button" data-object-id="#{data._id}") Update
+              - else
+                    form(action='/api/contacts/store', method='POST')
+                      label ID 
+                      input.form-control(type='text' name='id')
+                      label Name
+                      input.form-control(type='text' name='name')
+                      label Phone
+                      input.form-control(type='number' name='phone')
+                      label Address
+                      input.form-control(type='text' name='address')
+                      label Github Username
+                      input.form-control(type='text' name='github')
+                      button.btn.btn-primary(type="submit") Add
+
+              div.panel-footer
+                
+          div.col-lg-2
+
+          script.
+            $(document).ready(function(){
+              $('#btn-update').click(function(){
+                  var id = $(this).data("objectId");
+                  var params = {id: $('#id').val(), name: $('#name').val(), phone: $('#phone').val(), address: $('#address').val(), github: $('#github').val()};
+                  jQuery.ajax({
+                  url: 'http://localhost:3200/api/contacts/edit/' + id,
+                  type: 'PUT',
+                  data: params,
+                  success: function(result) {
+                    console.log(result);
+                    alert("Updated");
+                    }
+                });
+              });
+            });
+
+    

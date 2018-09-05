@@ -1,0 +1,78 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css' integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous")
+    script(src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous")
+  body
+    div.container
+      div.row
+        div.col-lg-12
+          div.col-lg-2
+          div.col-lg-8
+            div.panel.panel-default
+              div.panel-heading
+                h1 More Contacts 
+                p User name : #{username}
+              div.panel-body
+                input#search-key-word.form-control(type='text' placeholder='Search...')
+                table.table.table-stripped.table-hover 
+                  thead
+                    th ID
+                    th NAME
+                    th PHONE
+                    th ADDRESS
+                    th GITHUB
+                    th #
+                  tbody(id="reslut-body")
+
+                    each p in products
+                      tr(id="#{p._id}")
+                        td #{p.id}
+                        td #{p.name}
+                        td #{p.phone}
+                        td #{p.address}
+                        td 
+                          a(href="http://localhost:3200/contacts/view/#{p._id}") #{p.github}
+                        td 
+                          button.btn-delete-item.btn.btn-danger(type="button" data-object-id="#{p._id}") 
+                            i.glyphicon.glyphicon-remove
+
+                          a.btn.btn-default(href="http://localhost:3200/contacts/edit/#{p._id}")
+                            i.glyphicon.glyphicon-pencil 
+              div.panel-footer
+                p Total number of contacts: #{products.length}
+                  a.pull-right.btn.btn-primary(href='http://localhost:3200/contacts/add') Add new item
+          div.col-lg-2
+  
+  script.
+    $(document).ready(function(){
+      $('.btn-delete-item').click(function(){
+          var id = $(this).data("objectId");
+          jQuery.ajax({
+          url: 'http://localhost:3200/api/contacts/delete/' + id,
+          type: 'DELETE',
+          success: function(data) {
+            $('#'+id).remove();
+            }
+        });
+      });
+      $('#search-key-word').keyup(function(){
+          var keyword = $(this).val();
+          if(keyword != ''){
+            jQuery.ajax({
+            url: 'http://localhost:3200/api/contacts/search/' + keyword,
+            type: 'GET',
+            success: function(data) {
+            console.log(data);
+            $('#reslut-body').html(data);
+            }
+        });
+          }
+          
+      });
+    });  
+    

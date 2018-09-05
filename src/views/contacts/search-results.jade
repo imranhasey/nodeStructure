@@ -1,0 +1,12 @@
+each p in products
+    tr(id="#{p._id}")
+        td #{p.id}
+        td #{p.name}
+        td #{p.price}
+        td #{p.image}
+        td 
+            button.btn-delete-item.btn.btn-danger(type="button" data-object-id="#{p._id}") 
+                i.glyphicon.glyphicon-remove
+
+            a.btn.btn-default(href="http://localhost:3200/contacts/edit/#{p._id}")
+                i.glyphicon.glyphicon-pencil 
